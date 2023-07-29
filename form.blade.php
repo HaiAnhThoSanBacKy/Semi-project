@@ -1,28 +1,46 @@
 @extends('layout.base')
-@section('page_title', isset($rec) ? 'teacher information update: '.$rec->name : 'Add Teacher')
+@section('page_title', isset($rec) ? 'update subject: '.$rec->name : 'Add Subject')
 @section('slot')
 <form id="form" class="text-start" method="POST"
-    action="{{isset($rec) ? route('teachers.update', ['id' => $rec->id]) : route('teachers.create')}}">
+    action="{{isset($rec) ? route('subjects.update', ['id' => $rec->id]) : route('subjects.create')}}">
     {{ csrf_field() }}
-    <label class="form-label mt-3">Full Name *</label>
+    <label class="form-label mt-3">Name Subject</label>
     <div class="input-group input-group-outline">
         <input type="text" name="name" class="form-control" required value="{{$rec->name ?? old('name') ?? ''}}">
     </div>
 
-    <label class="form-label mt-3">User name *</label>
+    <label class="form-label mt-3">Subject ID *</label>
     <div class="input-group input-group-outline">
-        <input type="text" name="username" class="form-control" required value="{{$rec->username ?? old('username') ?? ''}}">
+        <input type="text" name="code" class="form-control" required value="{{$rec->code ?? old('code') ?? ''}}">
     </div>
 
-    <label class="form-label mt-3">Email *</label>
+    <label class="form-label mt-3">Semester *</label>
     <div class="input-group input-group-outline">
-        <input type="email" name="email" class="form-control" required value="{{$rec->email ?? old('email') ?? ''}}">
+        <input type="number" name="semester" class="form-control" required value="{{$rec->semester ?? old('semester') ?? ''}}">
     </div>
 
-    <label class="form-label mt-3">Password {{isset($rec) ? '' : '*'}}</label>
-    <div class="input-group input-group-outline">
-        <input type="password" name="password" class="form-control input-outline" {{isset($rec) ? '' : 'required'}}>
+    <label class="form-label mt-3">Teachers</label>
+    <div class="overflow-auto" style="max-height: 50vh;">
+        @foreach($teachers as $row)
+        @php
+        $check = false;
+        if(isset($teacher_subject_list))
+            foreach($teacher_subject_list as $index => $roww) {
+                if($roww->teacherProfile->id == $row->profile->id) {
+                    $check = true;
+                    unset($teacher_subject_list[$index]);
+                    break;
+                }
+            }
+        @endphp
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="teacher_id[]"
+                value="{{$row->profile->id}}" {{ $check ? 'checked' : '' }}>
+            <label class="custom-control-label" for="customRadio1">{{$row->name}}</label>
+        </div>
+        @endforeach
     </div>
+
     <input type="submit" class="btn bg-gradient-primary my-4 mb-2" value="{{ isset($rec) ? 'update' : 'Submit'}}">
 </form>
 @stop
