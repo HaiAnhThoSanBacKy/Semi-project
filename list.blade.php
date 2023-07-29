@@ -1,5 +1,5 @@
 @extends('layout.base')
-@section('page_title', 'Select subject to view point')
+@section('page_title', 'Select students to see grades')
 @section('slot')
 <div class="card">
     <div class="card-body px-0 pb-2">
@@ -7,8 +7,9 @@
             <table class="table align-items-center mb-0">
                 <thead>
                     <tr>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Name Subject</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Subject ID</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Full Name</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Student ID</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Class</th>
                         <th class="text-secondary opacity-7"></th>
                     </tr>
                 </thead>
@@ -16,10 +17,11 @@
                     @forelse($rows as $row)
                     <tr>
                         <td class="text-xs">{{$row->name}}</td>
-                        <td class="text-xs">{{$row->code}}</td>
+                        <td class="text-xs">{{$row->profile->code}}</td>
+                        <td class="text-xs">{{$row->profile->class->name}}</td>
                         <td class="align-middle">
                             <a class="text-secondary font-weight-bold text-xs"
-                                href="{{route('scores.subject', ['id' => $row->id])}}">View points</a>
+                                href="{{route('scores.student', ['id' => $row->profile->id])}}">View Point</a>
                         </td>
                     </tr>
                     @empty
